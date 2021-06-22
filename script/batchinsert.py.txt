@@ -1,0 +1,47 @@
+from cassandra.cluster import Cluster
+from cassandra.auth import PlainTextAuthProvider
+from cassandra import ConsistencyLevel, OperationTimedOut 
+from cassandra.query import BatchStatement, SimpleStatement
+
+# all above imports are assumptions. that is/may be required. 
+cloud_config= {
+	'secure_connect_bundle': ''C:\\xxxxxxx\\secure-connect-demo06.zip'
+}
+auth_provider = PlainTextAuthProvider('<CLIENT_ID>', '<CLIENT_SECRET>')
+clusterx = Cluster(cloud=cloud_config, auth_provider=auth_provider)
+sessionx = clusterx.connect() 
+insert_users = sessionx.prepare("INSERT INTO demo06.users (firstname,lastname, email) VALUES (?,?,?)")
+batch = BatchStatement(consistency_level=ConsistencyLevel.QUORUM) #need to check on various cons.level 
+json_obj = {
+    "manyusers": [
+        {
+            "firstname": "dori",
+            "lastname": "nemo",
+            "email": "nemo@example.com"
+        },
+        {
+            "firstname": "guru",
+            "lastname": "yoga",
+            "email": "yoga@example.com"
+        },
+        {
+            "firstname": "pat",
+            "lastname": "nicholas",
+            "email": "nicholas@example.com"
+        },
+        {
+            "firstname": "rose",
+            "lastname": "wood",
+            "email": "wood@example.com"
+        },
+        {
+            "firstname": "jira",
+            "lastname": "agila",
+            "email": "agila@example.com"
+        },
+    ]
+}
+for i in json_obj['manyusers']:
+    batch.add(insert_users, (i['firstname'],i['lastname'], i['email']))
+
+sessionx.execute(batch)
