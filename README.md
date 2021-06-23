@@ -9,6 +9,7 @@ High level steps
 1. goto datastax.com and sign up for astra database
 
 2. create astra database
+<img src="images/image1.png">
 
 3. Create app user and download the tokens
 
