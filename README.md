@@ -17,3 +17,5 @@ High level steps
 5. download secure connect bundle under python and connect to database
 
 6. run bulkinsert python script for batch insert.
+
+7. Screenshots attached
